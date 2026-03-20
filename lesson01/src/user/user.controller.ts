@@ -2,7 +2,7 @@ import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Query,
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { SkipThrottle } from '@nestjs/throttler';
+import { SkipThrottle, Throttle } from '@nestjs/throttler';
 
 @Controller('user')
 @SkipThrottle()
@@ -19,6 +19,7 @@ export class UserController {
       return this.userService.findAll(role);
     }
 
+    @Throttle({short:{ttl: 10000, limit: 2}})
     @Get(':id')
     findOne(@Param('id',ParseIntPipe)id: number){
         return this.userService.findOne(id);
