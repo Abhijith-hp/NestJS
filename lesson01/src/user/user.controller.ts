@@ -2,12 +2,15 @@ import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Query,
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { SkipThrottle } from '@nestjs/throttler';
 
 @Controller('user')
+@SkipThrottle()
 export class UserController {
 
     constructor(private readonly userService: UserService){}
 
+    @SkipThrottle({default: false})
     @Get()
     findAll(@Query('role') role?: 'INTERN' | 'EMPLOYEE', @Query('age') age?: number){
         if(age){
